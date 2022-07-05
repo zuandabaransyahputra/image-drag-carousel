@@ -41,23 +41,50 @@ function App() {
     [isDown, startX, scrollLeft]
   );
 
+  const touchEnd = useCallback(e => {
+    isDown = false;
+  },
+    [isDown])
+
+  const touchStart = useCallback(e => {
+    isDown = true;
+    startX = e.pageX - divRef.current.offsetLeft;
+    scrollLeft = divRef.current.scrollLeft;
+  },
+    [isDown, startX, scrollLeft])
+
+  const touchMove = useCallback(e => {
+    if (!isDown) return;
+    // e.preventDefault();
+    const x = e.pageX - divRef.current.offsetLeft;
+    const walk = (x - startX) * 3;
+    divRef.current.scrollLeft = scrollLeft - walk;
+  },
+    [isDown, startX, scrollLeft])
+
   useLayoutEffect(() => {
     document.addEventListener('mousedown', mouseDown);
     document.addEventListener('mouseleave', mouseLeave);
     document.addEventListener('mouseup', mouseUp);
     document.addEventListener('mousemove', mouseMove);
+    document.addEventListener('touchend', touchEnd);
+    document.addEventListener('touchstart', touchStart);
+    document.addEventListener('touchmove', touchMove);
 
     return () => {
       document.removeEventListener('mousedown', mouseDown);
       document.removeEventListener('mouseleave', mouseLeave);
       document.removeEventListener('mouseup', mouseUp);
       document.removeEventListener('mousemove', mouseMove);
+      document.removeEventListener('touchend', touchEnd);
+      document.removeEventListener('touchstart', touchStart);
+      document.removeEventListener('touchmove', touchMove);
     };
   }, [mouseDown, mouseLeave, mouseUp, mouseMove]);
 
   return (
     <>
-      <h1 className="text-4xl text-purple-700 text-center my-10">
+      <h1 className="text-3xl lg:text-4xl text-purple-700 text-center my-10">
         Image Drag Carousel
       </h1>
       <div
