@@ -3,6 +3,7 @@ import { useCallback, useLayoutEffect, useRef } from 'react';
 
 function App() {
   const divRef = useRef(null);
+  const imageRef = useRef(null)
   let isDown = false; //Ketika ditekan
   let startX = useRef();
   let scrollLeft = useRef();
@@ -48,15 +49,14 @@ function App() {
 
   const touchStart = useCallback(e => {
     isDown = true;
-    startX = e.pageX - divRef.current.offsetLeft;
+    startX = e.touches[0].pageX - divRef.current.offsetLeft;
     scrollLeft = divRef.current.scrollLeft;
   },
     [isDown, startX, scrollLeft])
 
   const touchMove = useCallback(e => {
     if (!isDown) return;
-    // e.preventDefault();
-    const x = e.pageX - divRef.current.offsetLeft;
+    const x = e.touches[0].pageX - divRef.current.offsetLeft;
     const walk = (x - startX) * 3;
     divRef.current.scrollLeft = scrollLeft - walk;
   },
@@ -67,8 +67,8 @@ function App() {
     document.addEventListener('mouseleave', mouseLeave);
     document.addEventListener('mouseup', mouseUp);
     document.addEventListener('mousemove', mouseMove);
-    document.addEventListener('touchend', touchEnd);
     document.addEventListener('touchstart', touchStart);
+    document.addEventListener('touchend', touchEnd);
     document.addEventListener('touchmove', touchMove);
 
     return () => {
@@ -95,6 +95,7 @@ function App() {
           .fill()
           .map((_, index) => (
             <img
+              ref={imageRef}
               key={index}
               src="/images/mountain.jpg"
               alt="Mountain"
