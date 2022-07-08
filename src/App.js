@@ -38,6 +38,7 @@ function App() {
       const x = e.pageX - divRef.current.offsetLeft;
       const walk = (x - startX) * 3;
       divRef.current.scrollLeft = scrollLeft - walk;
+      console.log(divRef.current.scrollLeft)
     },
     [isDown, startX, scrollLeft]
   );
@@ -63,24 +64,26 @@ function App() {
     [isDown, startX, scrollLeft])
 
   useLayoutEffect(() => {
-    document.addEventListener('mousedown', mouseDown);
-    document.addEventListener('mouseleave', mouseLeave);
-    document.addEventListener('mouseup', mouseUp);
-    document.addEventListener('mousemove', mouseMove);
-    document.addEventListener('touchstart', touchStart);
-    document.addEventListener('touchend', touchEnd);
-    document.addEventListener('touchmove', touchMove);
+    divRef.current.addEventListener('mousedown', mouseDown);
+    divRef.current.addEventListener('mouseleave', mouseLeave);
+    divRef.current.addEventListener('mouseup', mouseUp);
+    divRef.current.addEventListener('mousemove', mouseMove);
+    divRef.current.addEventListener('touchstart', touchStart);
+    divRef.current.addEventListener('touchend', touchEnd);
+    divRef.current.addEventListener('touchmove', touchMove);
 
     return () => {
-      document.removeEventListener('mousedown', mouseDown);
-      document.removeEventListener('mouseleave', mouseLeave);
-      document.removeEventListener('mouseup', mouseUp);
-      document.removeEventListener('mousemove', mouseMove);
-      document.removeEventListener('touchend', touchEnd);
-      document.removeEventListener('touchstart', touchStart);
-      document.removeEventListener('touchmove', touchMove);
+      divRef.current.removeEventListener('mousedown', mouseDown);
+      divRef.current.removeEventListener('mouseleave', mouseLeave);
+      divRef.current.removeEventListener('mouseup', mouseUp);
+      divRef.current.removeEventListener('mousemove', mouseMove);
+      divRef.current.removeEventListener('touchstart', touchStart);
+      divRef.current.removeEventListener('touchend', touchEnd);
+      divRef.current.removeEventListener('touchmove', touchMove);
     };
-  }, [mouseDown, mouseLeave, mouseUp, mouseMove]);
+  }, [mouseDown, mouseLeave, mouseUp, mouseMove, touchStart,
+    touchEnd,
+    touchMove]);
 
   return (
     <>
